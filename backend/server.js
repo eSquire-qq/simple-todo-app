@@ -12,6 +12,7 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 
+
 // Отримати всі задачі
 app.get("/todos", (req, res) => {
   db.all("SELECT * FROM todos ORDER BY id DESC", [], (err, rows) => {
@@ -22,6 +23,7 @@ app.get("/todos", (req, res) => {
     res.json(rows);
   });
 });
+
 
 // Додати задачу
 app.post("/todos", (req, res) => {
@@ -46,6 +48,7 @@ app.post("/todos", (req, res) => {
     }
   );
 });
+
 
 // Видалити задачу
 app.delete("/todos/:id", (req, res) => {
