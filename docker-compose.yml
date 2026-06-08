@@ -1,6 +1,5 @@
-version: '3.8'
-
 services:
+  # Наш уже знайомий бекенд
   todo-backend:
     build: ./backend
     container_name: my-todo-backend
@@ -9,3 +8,14 @@ services:
     volumes:
       - ./backend/todo.db:/app/todo.db
     restart: always
+
+  # Наш новий фронтенд
+  todo-frontend:
+    build: ./frontend
+    container_name: my-todo-frontend
+    ports:
+      - "80:80" # Тепер твій сайт буде відкриватися просто за адресою http://localhost (без портів)
+    restart: always
+    # Кажемо, що фронтенд запускається тільки після того, як успішно стартує бекенд
+    depends_on:
+      - todo-backend
