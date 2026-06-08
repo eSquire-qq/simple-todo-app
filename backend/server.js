@@ -71,7 +71,7 @@ app.get("/health", (req, res) => {
 
 app.get("/info", (req, res) => {
   res.json({
-    app: "simple-todo-app",
+    app: "simple-todo-app-backend",
     version: "1.0.0",
     port: PORT,
   });
