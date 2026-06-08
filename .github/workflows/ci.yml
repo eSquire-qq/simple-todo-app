@@ -1,0 +1,43 @@
+name: Node.js CI with Docker Build
+
+# 1. Тріггер: запускати пайплайн при кожному git push в гілку main
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    # Запускаємо чисту віртуальну машину Ubuntu в хмарі GitHub
+    runs-on: ubuntu-latest
+
+    steps:
+    # Крок 1: Клонуємо твій код з репозиторію на цю віртуальну машину
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    # Крок 2: Розгортаємо Node.js потрібної версії
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: 'npm'
+        cache-dependency-path: './backend/package-lock.json'
+
+    # Крок 3: Заходимо в папку backend і встановлюємо залежності для тесту
+    - name: Install dependencies
+      run: |
+        cd backend
+        npm ci
+
+    # Крок 4: Тестуємо збірку Docker-образу
+    # Це гарантує, що твій Dockerfile без помилок і здатний зібратися в майбутньому на сервері
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Test Docker Build
+      uses: docker/build-push-action@v5
+      with:
+        context: ./backend
+        push: false # Поки що не відправляємо в Docker Hub, просто тестуємо збірку

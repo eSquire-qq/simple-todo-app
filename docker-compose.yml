@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  todo-backend:
+    build: ./backend
+    container_name: my-todo-backend
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./backend/todo.db:/app/todo.db
+    restart: always
